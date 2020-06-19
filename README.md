@@ -81,10 +81,10 @@ CUT_AFTER={"rkt":2,"kubernetes-cni":2,"cri-tools":2}
 
 Создадим /etc/yum.repos.d/prometheus.repo со следующим содержимым:
 ```
-[prometheus]
+[prometheus-7]
 name=prometheus
 baseurl=https://packagecloud.io/prometheus-rpm/release/el/$releasever/$basearch
-repo_gpgcheck=1
+repo_gpgcheck=0
 enabled=1
 gpgkey=https://packagecloud.io/prometheus-rpm/release/gpgkey
        https://raw.githubusercontent.com/lest/prometheus-rpm/master/RPM-GPG-KEY-prometheus-rpm
