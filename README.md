@@ -102,5 +102,3 @@ DOWNLOAD_DIR=/var/www/repos
 #NUMBER_PACKAGE_IN_REPO={"prometheus-7":4}
 ```
 
-Диаграмма для репо kubernetes и grafana
-![](https://habrastorage.org/webt/wd/8f/dj/wd8fdjxo6a-j1fevwuuiz8lkp4u.png)
