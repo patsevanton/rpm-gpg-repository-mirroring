@@ -44,7 +44,7 @@ REPOS={"grafana":"6.5.3"}
 
 Запускаем скрипт
 ```
-rpm-repository-mirroring
+rpm-gpg-repository-mirroring
 ```
 
 После запуска скрипта в директории /var/www/repos должна появится директория grafana, содержащая rpm репозиторий.
