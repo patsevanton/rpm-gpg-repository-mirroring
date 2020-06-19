@@ -48,6 +48,24 @@ rpm-gpg-repository-mirroring
 ```
 
 После запуска скрипта в директории /var/www/repos должна появится директория grafana, содержащая rpm репозиторий.
+```
+ls -1 /var/www/repos/grafana/
+grafana-6.5.3-1.x86_64.rpm
+grafana-6.6.0-1.x86_64.rpm
+grafana-6.6.1-1.x86_64.rpm
+grafana-6.6.2-1.x86_64.rpm
+grafana-6.7.0-1.x86_64.rpm
+grafana-6.7.0-test.x86_64.rpm
+grafana-6.7.1-1.x86_64.rpm
+grafana-6.7.2-1.x86_64.rpm
+grafana-6.7.3-1.x86_64.rpm
+grafana-6.7.4-1.x86_64.rpm
+grafana-7.0.0-1.x86_64.rpm
+grafana-7.0.1-1.x86_64.rpm
+grafana-7.0.2-1.x86_64.rpm
+grafana-7.0.3-1.x86_64.rpm
+repodata
+```
 
 ### Репозиторий, с которого нужно скачать все последние rpm пакеты начиная с определенной версии + N последних версий определенных rpm пакетов. Пример Kubernetes
 
@@ -75,6 +93,39 @@ REPOS={"kubernetes":"1.17.6"}
 # Для всех репозиторией, в которых есть rpm-пакет, совпадающий с ключом, необходимо скачать последние N версии этих rpm пакетов.
 # Где N указываетя в значении.
 CUT_AFTER={"rkt":2,"kubernetes-cni":2,"cri-tools":2}
+```
+
+После запуска скрипта в директории /var/www/repos должна появится директория kubernetes, содержащая rpm репозиторий.
+```
+ls -1 /var/www/repos/kubernetes/
+cri-tools-1.12.0-0.x86_64.rpm
+cri-tools-1.13.0-0.x86_64.rpm
+kubeadm-1.17.6-0.x86_64.rpm
+kubeadm-1.17.7-0.x86_64.rpm
+kubeadm-1.18.0-0.x86_64.rpm
+kubeadm-1.18.1-0.x86_64.rpm
+kubeadm-1.18.2-0.x86_64.rpm
+kubeadm-1.18.3-0.x86_64.rpm
+kubeadm-1.18.4-0.x86_64.rpm
+kubectl-1.17.6-0.x86_64.rpm
+kubectl-1.17.7-0.x86_64.rpm
+kubectl-1.18.0-0.x86_64.rpm
+kubectl-1.18.1-0.x86_64.rpm
+kubectl-1.18.2-0.x86_64.rpm
+kubectl-1.18.3-0.x86_64.rpm
+kubectl-1.18.4-0.x86_64.rpm
+kubelet-1.17.6-0.x86_64.rpm
+kubelet-1.17.7-0.x86_64.rpm
+kubelet-1.18.0-0.x86_64.rpm
+kubelet-1.18.1-0.x86_64.rpm
+kubelet-1.18.2-0.x86_64.rpm
+kubelet-1.18.3-0.x86_64.rpm
+kubelet-1.18.4-0.x86_64.rpm
+kubernetes-cni-0.6.0-0.x86_64.rpm
+kubernetes-cni-0.7.5-0.x86_64.rpm
+repodata
+rkt-1.26.0-1.x86_64.rpm
+rkt-1.27.0-1.x86_64.rpm
 ```
 
 ### Репозиторий, с которого нужно скачать N последних версий определенных rpm пакетов. Пример Prometheus
