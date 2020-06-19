@@ -25,7 +25,7 @@ yum -y install rpm-gpg-repository-mirroring
 [grafana]
 name=grafana
 baseurl=https://packages.grafana.com/oss/rpm
-repo_gpgcheck=1
+repo_gpgcheck=0
 enabled=1
 gpgcheck=0
 gpgkey=https://packages.grafana.com/gpg.key
