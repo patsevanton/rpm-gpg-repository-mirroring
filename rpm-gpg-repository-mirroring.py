@@ -92,66 +92,67 @@ download_dir = get_download_dir(config)
 # где сторонней логики меньше, и понимать эту часть проще.
 #
 # Обработка логики первых двух настроек: прохождение по репозиторию объединяющему их.
-for repo in repo_ver:
-	yb = yum.YumBase()
-	if not yb.setCacheDir():
-		print >>sys.stderr, "Can't create a tmp. cachedir. "
-		sys.exit(1)
-	yb.repos.disableRepo('*')
-	yb.repos.enableRepo(repo)
+if repo_ver is not None:
+	for repo in repo_ver:
+		yb = yum.YumBase()
+		if not yb.setCacheDir():
+			print >>sys.stderr, "Can't create a tmp. cachedir. "
+			sys.exit(1)
+		yb.repos.disableRepo('*')
+		yb.repos.enableRepo(repo)
 
-	if not os.path.exists(download_dir + '/' + repo):
-		os.makedirs(download_dir + '/' + repo)
-	tmp = download_dir + '/' + repo + '/tmp'
-	if not os.path.exists(tmp):
-		os.makedirs(tmp)
-	else:
-		files = glob.glob(tmp + '/*')
-		for f in files:
-			os.remove(f)
-
-	repo_name_ver[repo] = {}
-	ignore = False
-	prev_name = None
-	for pkg in sorted(yb.pkgSack.returnPackages(), reverse=True):
-		if ignore == True and prev_name == pkg.name:
-			continue
-		if prev_name != pkg.name:
-			ignore = False
-
-		pkg.repo.copy_local = True
-		pkg.repo.cache = 0
-
-		# Если попали в имя, нужное второй настроке.
-		if name_count is not None and pkg.name in name_count:
-			# Текущая глубина всё ещё существует.
-			if name_count[pkg.name] > 0:
-				# Добавится или инициализируется запись в глобальный словарь.
-				if pkg.name not in repo_name_ver[repo]:
-					repo_name_ver[repo][pkg.name] = []
-				repo_name_ver[repo][pkg.name].append(pkg.version + '-' + pkg.release)
-				# Надо уменьшить текущую историю для будущего отслеживания.
-				name_count[pkg.name] -= 1
-				# Скачать.
-				save_po(pkg, repo)
-			# Имя всё еще остлеживаемое, но предел текущий глубины.
-			else:
-				# Удалить запись из переменной-словаря.
-				name_count.pop(pkg.name, None)
-				# Игнорировать следующие глубины в случае если попадётся то же имя.
-				ignore = True
-		# Если не попали под вторую настройку, а она взаимоисключает первую.
+		if not os.path.exists(download_dir + '/' + repo):
+			os.makedirs(download_dir + '/' + repo)
+		tmp = download_dir + '/' + repo + '/tmp'
+		if not os.path.exists(tmp):
+			os.makedirs(tmp)
 		else:
-			# Для избранных номеров версий игнорировать все версии что ниже определенной.
-			if LooseVersion(pkg.version) >= LooseVersion(repo_ver[repo]):
-				if pkg.name not in repo_name_ver[repo]:
-					repo_name_ver[repo][pkg.name] = []
-				repo_name_ver[repo][pkg.name].append(pkg.version + '-' + pkg.release)
-				save_po(pkg, repo)
-		prev_name = pkg.name
-	process = subprocess.Popen("/usr/bin/createrepo --update {0}/{1}".format(download_dir, repo), shell=True, stdout=subprocess.PIPE)
-	output, error = process.communicate()
-	print(output)
+			files = glob.glob(tmp + '/*')
+			for f in files:
+				os.remove(f)
+
+		repo_name_ver[repo] = {}
+		ignore = False
+		prev_name = None
+		for pkg in sorted(yb.pkgSack.returnPackages(), reverse=True):
+			if ignore == True and prev_name == pkg.name:
+				continue
+			if prev_name != pkg.name:
+				ignore = False
+
+			pkg.repo.copy_local = True
+			pkg.repo.cache = 0
+
+			# Если попали в имя, нужное второй настроке.
+			if name_count is not None and pkg.name in name_count:
+				# Текущая глубина всё ещё существует.
+				if name_count[pkg.name] > 0:
+					# Добавится или инициализируется запись в глобальный словарь.
+					if pkg.name not in repo_name_ver[repo]:
+						repo_name_ver[repo][pkg.name] = []
+					repo_name_ver[repo][pkg.name].append(pkg.version + '-' + pkg.release)
+					# Надо уменьшить текущую историю для будущего отслеживания.
+					name_count[pkg.name] -= 1
+					# Скачать.
+					save_po(pkg, repo)
+				# Имя всё еще остлеживаемое, но предел текущий глубины.
+				else:
+					# Удалить запись из переменной-словаря.
+					name_count.pop(pkg.name, None)
+					# Игнорировать следующие глубины в случае если попадётся то же имя.
+					ignore = True
+			# Если не попали под вторую настройку, а она взаимоисключает первую.
+			else:
+				# Для избранных номеров версий игнорировать все версии что ниже определенной.
+				if LooseVersion(pkg.version) >= LooseVersion(repo_ver[repo]):
+					if pkg.name not in repo_name_ver[repo]:
+						repo_name_ver[repo][pkg.name] = []
+					repo_name_ver[repo][pkg.name].append(pkg.version + '-' + pkg.release)
+					save_po(pkg, repo)
+			prev_name = pkg.name
+		process = subprocess.Popen("/usr/bin/createrepo --update {0}/{1}".format(download_dir, repo), shell=True, stdout=subprocess.PIPE)
+		output, error = process.communicate()
+		print(output)
 
 # Работа с репозиториями, к которым применяется третье ограничение на отсечение по количеству свежих версий.
 #

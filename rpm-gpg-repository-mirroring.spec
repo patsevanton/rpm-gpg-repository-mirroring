@@ -2,7 +2,7 @@
 
 Name:    rpm-gpg-repository-mirroring
 Version: 0.6
-Release: 1
+Release: 2
 Summary: Script for download RPM
 Group:   Development Tools
 License: ASL 2.0
