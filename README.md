@@ -1,5 +1,16 @@
 # rpm-gpg-repository-mirroring - Скрипт для скачивания RPM пакетов из репозиториев, для которых нельзя сделать RPM зеркало
 
+В некоторых организациях с серверов нет доступа в интернет. В таких случаях делают зеркала основных репозиториев.
+Цель данного поста рассказать о скрипте, который скачивает последние версии rpm пакетов из репозиториев Grafana, Kubernetes, Gitlab, packagecloud.io и так далее.
+
+Какие преимущества использования скрипта перед reposync
+ - rpm-gpg-repository-mirroring может скачивать все rpm пакеты, начиная с определенной версии
+ - rpm-gpg-repository-mirroring может скачивать последние N версий rpm пакетов
+ - rpm-gpg-repository-mirroring значительно экономит трафик в сравнении с reposync
+ - rpm-gpg-repository-mirroring значительно экономит дисковое пространство в сравнении с reposync
+
+![](https://habrastorage.org/webt/_m/ji/ql/_mjiqlrkde3cku5lfqwr7muzyq4.png)
+
 ## Выключаем Selinux
 ```
 sudo sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
