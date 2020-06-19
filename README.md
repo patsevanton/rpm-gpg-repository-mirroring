@@ -1,5 +1,11 @@
 # rpm-gpg-repository-mirroring - Скрипт для скачивания RPM пакетов из репозиториев, для которых нельзя сделать RPM зеркало
 
+## Выключаем Selinux
+```
+sudo sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
+sudo reboot
+```
+
 ## Установка и запуск rpm-gpg-repository-mirroring (epel-release нужен для nginx)
 ```
 yum install -y epel-release
