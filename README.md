@@ -1,12 +1,8 @@
-# rpm-gpg-repository-mirroring - Скрипт для скачивания RPM пакетов из репозиториев, для которых нельзя сделать RPM зеркало
-
 В некоторых организациях с серверов нет доступа в интернет. В таких случаях делают зеркала основных репозиториев.
 Но что делать, если доступ с серверов ограничен, а нужные rpm пакеты нужно установить? Обычно используют скачивают reposync или скачивают руками и делают локальный репозиторий.
-Также можно добавить репозиторий, который будет ходить в интернет через прокси сервер. На проски сервер может быть большая нагрузка. 
-
-![](https://habrastorage.org/webt/_m/ji/ql/_mjiqlrkde3cku5lfqwr7muzyq4.png)
-
+Также можно добавить репозиторий, который будет ходить в интернет через прокси сервер. На проски сервер может быть большая нагрузка.
 Но можно использовать скрипт rpm-gpg-repository-mirroring, который скачает нужные rpm пакеты и сделает локальное зеркало.
+ <cut />
 
 Цель данного поста рассказать о скрипте, который скачивает последние версии rpm пакетов из репозиториев Grafana, Kubernetes, Gitlab, packagecloud.io и так далее.
 
@@ -15,7 +11,10 @@
  - rpm-gpg-repository-mirroring может скачивать последние N версий rpm пакетов
  - rpm-gpg-repository-mirroring значительно экономит трафик в сравнении с reposync
  - rpm-gpg-repository-mirroring значительно экономит дисковое пространство в сравнении с reposync
- - rpm-gpg-repository-mirroring скачивает последню версию в отличие от репозиториев, которые созданы руками и rpm были добавлены руками
+ - rpm-gpg-repository-mirroring скачивает последнюю версию в отличие от репозиториев, которые созданы руками и rpm были добавлены руками
+
+## Исходный код
+https://github.com/patsevanton/rpm-gpg-repository-mirroring
 
 ## Выключаем Selinux
 ```
@@ -65,8 +64,9 @@ rpm-gpg-repository-mirroring
 ```
 
 После запуска скрипта в директории /var/www/repos должна появится директория grafana, содержащая rpm репозиторий.
+
+<spoiler title="ls -1 /var/www/repos/grafana/">
 ```
-ls -1 /var/www/repos/grafana/
 grafana-6.5.3-1.x86_64.rpm
 grafana-6.6.0-1.x86_64.rpm
 grafana-6.6.1-1.x86_64.rpm
@@ -83,6 +83,7 @@ grafana-7.0.2-1.x86_64.rpm
 grafana-7.0.3-1.x86_64.rpm
 repodata
 ```
+</spoiler>
 
 ### Репозиторий, с которого нужно скачать все последние rpm пакеты начиная с определенной версии + N последних версий определенных rpm пакетов. Пример Kubernetes
 
@@ -108,13 +109,15 @@ DOWNLOAD_DIR=/var/www/repos
 REPOS={"kubernetes":"1.17.6"}
 
 # Для всех репозиторией, в которых есть rpm-пакет, совпадающий с ключом, необходимо скачать последние N версии этих rpm пакетов.
-# Где N указываетя в значении.
+# Где N указывается в значении.
 CUT_AFTER={"rkt":2,"kubernetes-cni":2,"cri-tools":2}
 ```
 
 После запуска скрипта в директории /var/www/repos должна появится директория kubernetes, содержащая rpm репозиторий.
+
+<spoiler title="ls -1 /var/www/repos/kubernetes/">
 ```
-ls -1 /var/www/repos/kubernetes/
+
 cri-tools-1.12.0-0.x86_64.rpm
 cri-tools-1.13.0-0.x86_64.rpm
 kubeadm-1.17.6-0.x86_64.rpm
@@ -144,6 +147,7 @@ repodata
 rkt-1.26.0-1.x86_64.rpm
 rkt-1.27.0-1.x86_64.rpm
 ```
+</spoiler>
 
 ### Репозиторий, с которого нужно скачать N последних версий определенных rpm пакетов. Пример Prometheus
 
@@ -170,10 +174,10 @@ DOWNLOAD_DIR=/var/www/repos
 #NUMBER_PACKAGE_IN_REPO={"prometheus-7":4}
 ```
 
-
 После запуска скрипта в директории /var/www/repos должна появится директория prometheus-7, содержащая rpm репозиторий.
+
+<spoiler title="ls -1 /var/www/repos/prometheus-7/">
 ```
-ls -1 /var/www/repos/prometheus-7/
 alertmanager-0.19.0-2.el7.centos.x86_64.rpm
 alertmanager-0.20.0-2.el7.centos.x86_64.rpm
 alertmanager-0.20.0-2.el7.x86_64.rpm
@@ -268,3 +272,5 @@ thanos-0.12.0-1.el7.x86_64.rpm
 thanos-0.12.1-1.el7.x86_64.rpm
 thanos-0.12.2-1.el7.x86_64.rpm
 ```
+
+</spoiler>
